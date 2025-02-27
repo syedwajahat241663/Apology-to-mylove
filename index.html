@@ -1,126 +1,479 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Heartfelt Apology to Ayesha</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background: linear-gradient(45deg, #ff99cc, #ff6699);
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            overflow-x: hidden;
-            position: relative;
-        }
+  <meta charset="UTF-8" />
+  <title>Love Letter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1; /* Ensure text is above emojis */
-        }
+    body {
+      background: linear-gradient(135deg, #d7ccc8, #bdb2a7);
+      font-family: 'Dancing Script', cursive;
+      color: #3e2723;
+      overflow-y: auto;
+      min-height: 100vh;
+      position: relative;
+    }
 
-        .hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0; /* Send emojis to the background */
-        }
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 20%, #ffebee 80%);
+      animation: pulseBackground 4s ease infinite;
+      z-index: -2;
+    }
 
-        .heart {
-            position: absolute;
-            font-size: 30px;
-            opacity: 0.2; /* Darker and more transparent */
-            color: rgba(0, 0, 0, 0.7); /* Much darker emojis */
-            animation: float 8s infinite ease-in-out;
-        }
+    @keyframes pulseBackground {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
 
-        .slide-container {
-            white-space: nowrap;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            scroll-snap-type: x mandatory;
-        }
+    #emoji-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
 
-        .para {
-            background: rgba(255, 255, 255, 0.85); /* Slightly transparent white */
-            padding: 15px;
-            border-radius: 10px;
-            margin-right: 20px;
-            display: inline-block;
-            width: 90%;
-            max-width: 550px;
-            white-space: normal;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            scroll-snap-align: start;
-            max-height: 70vh; /* Shorter vertical length */
-            overflow-y: auto; /* Scrollable if content overflows */
-        }
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
 
-        .emoji {
-            font-size: 24px;
-            text-shadow: 0 0 8px rgba(255,50,150,0.5);
-        }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(110vh) translateX(-50px);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-20vh) translateX(50px);
+        opacity: 0;
+      }
+    }
 
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(20deg); }
-            100% { transform: translateY(0) rotate(0deg); }
-        }
+    #login-container {
+      width: 90%;
+      max-width: 400px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(5px);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
 
-        h1 {
-            color: #cc0066;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-    </style>
+    #login-container h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    #login-container input,
+    #login-container button {
+      font-family: 'Dancing Script', cursive;
+    }
+
+    #login-container input {
+      width: 80%;
+      padding: 10px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #passwordInput::placeholder {
+      font-family: 'Dancing Script', cursive;
+    }
+
+    #login-container button {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #fff;
+      cursor: pointer;
+      color: #3e2723;
+      transition: transform 0.3s ease;
+    }
+
+    #login-container button:hover {
+      transform: scale(1.1);
+    }
+
+    #errorMsg {
+      margin-top: 10px;
+      color: red;
+      font-size: 1rem;
+    }
+
+    #reveal-message {
+      display: none;
+      width: 90%;
+      max-width: 400px;
+      margin: 20px auto;
+      text-align: center;
+      font-size: 1.4rem;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    #letter-container {
+      display: none;
+      width: 90%;
+      max-width: 500px;
+      margin: 30px auto 50px auto;
+      padding: 20px;
+      background: #f5e1c0 url('your-background-image.jpg') no-repeat center;
+      background-size: cover;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .paragraph {
+      font-size: 1.1rem;
+      line-height: 1.3;
+      margin-bottom: 15px;
+      text-align: justify;
+      color: #3e2723;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #heart-btn {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ff4d4d;
+      animation: heartbeat 1.5s infinite;
+      filter: drop-shadow(0 0 10px #ff4d4d);
+      transition: all 0.3s ease;
+    }
+
+    #heart-btn:hover {
+      transform: translateX(-50%) scale(1.5);
+      filter: drop-shadow(0 0 20px #ff69b4);
+    }
+
+    @keyframes heartbeat {
+      0% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.2); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+
+    #arrow {
+      position: absolute;
+      bottom: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      color: #3e2723;
+      text-align: center;
+    }
+
+    #arrow::before {
+      content: "↑";
+      display: block;
+      font-size: 1.5rem;
+    }
+
+    #romantic-message {
+      display: none;
+      text-align: center;
+      font-size: 1.4rem;
+      margin-top: 20px;
+      color: #ff4d4d;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .message-bubble {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 20px;
+      animation: floatBubble 8s linear forwards;
+      font-size: 1.2rem;
+      z-index: 999;
+    }
+
+    @keyframes floatBubble {
+      0% { transform: translateY(110vh) scale(0); opacity: 0; }
+      20% { transform: translateY(80vh) scale(1); opacity: 1; }
+      100% { transform: translateY(-20vh) scale(0); opacity: 0; }
+    }
+
+    /* NEW: Raindrop animation */
+    @keyframes raindrop {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* NEW: Sparkle effect */
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: gold;
+      border-radius: 50%;
+      animation: sparkle 1s ease-out;
+      pointer-events: none;
+    }
+    @keyframes sparkle {
+      0% { transform: scale(0); opacity: 1; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+
+    /* NEW: Love meter */
+    #love-meter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 100px;
+      height: 20px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #love-progress {
+      height: 100%;
+      background: linear-gradient(to right, #ff69b4, #ff1493);
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    /* NEW: Floating text effect */
+    .float-text {
+      position: fixed;
+      font-size: 1.5rem;
+      color: #ff4d4d;
+      animation: floatUp 3s ease-out forwards;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="hearts">
-        <!-- Heart emojis will be added here by JavaScript -->
+  <!-- NEW: Love meter -->
+  <div id="love-meter">
+    <div id="love-progress"></div>
+  </div>
+
+  <div id="emoji-container"></div>
+
+  <div id="login-container">
+    <h2>Who's your beloved one, ik it's me but who is it😁😜🤭🤭</h2>
+    <input type="text" id="passwordInput" placeholder="Enter answer here..." />
+    <br />
+    <button onclick="checkPassword()">Submit</button>
+    <p id="errorMsg"></p>
+  </div>
+
+  <div id="reveal-message"></div>
+
+  <div id="letter-container">
+    <div id="paragraph1" class="paragraph">
+      "Hey meri Jan 🥺🥺 meri jan I just loveeeeee youuuuuuuuuuuuuuu😭❤ jana😭🥺
+      I don't know what to write but I'm writing my pure heart feelings here,
+      I loveeee youuuuu soooo muchhhhhh yarrrrrr 😭, like I hurt you many times
+      and you still forgive me and choose to stay with me 🥺😭❤ jana I know I've
+      did many blunders before but I promise I will try not hurt you again for
+      anything and fill you with all of my love 😭🥺❤ I just loveeeee youuuuu
+      yarrrrr🥺 koi or hota tou chor kr bh chla jata but youreeeeee mineeeee
+      ummmmmmmmm idk when u will get to seee thiissssss cuz we are not talking
+      everyday but only 2 days now 🥺 buttttt thankkkkk youuuuu soooo muchhhh yr
+      for staying with me even I hurt you soo much 🥺❤you're the perfect and the
+      girl I've dreamed of🥺😭😭❤ you made me fall deeeppppllyyyy in love with you
+      moreeee🥺💗, yar bs tum ko bh kro bs dil sh krna, gussa Ho, naraz Ho kuch bh
+      Ho mujsy kehna🥺 or ye ye chorne ki batein na Kia Karo bht hurt hota hy
+      😖🥺😭"
     </div>
-    
-    <div class="container">
-        <h1>💗 To My Dearest Ayesha & My Loveliest🖤</h1>
-        
-        <div class="slide-container">
-            <div class="para">
-                <span class="emoji">Sorry For What I've Did 🥺</span><br><br>
-                Ayesha 😖😭 I am really sorry for how badly I've treated you 😖😭 I'm really sorry for doing all those rubbish 😖 for hurting you badly when all you needed was my love 💔, I'm really sorry 💔, I realized it now how much it hurts 💔😖, I think it's too late for realizing 💔 mujhy MAAF krdo Jana 😖💔 tumhare siwa koi nhi h mera 💔 tumsy hi dil laga h or tumhy hi itna badly treat Kia h mène, please mujhy MAAF krdo 😖😖, i love you soo much 🥺🥺, yr ayesha Mein Kia kahun bhut ziada jazbati hu or is jazbat me lgta h tumhy kho dia h mene 💔🥺 mujhy MAAF krdo, pta nhi Mery liye tumhari wo muhabbat wapsi ayegi y'a nhi but ayesha I'm really sorry 💔, im sorry for treating you badly, for breaking all of your promises, for not trusting you, for misbehaving with you, for being rude with you, for not giving love to you. I'm sorry Yar 🥺🥺🥺🥺🥺. Ik it's too late but I'm sorry yr I really love u soo much 🥺💔.
-            </div>
 
-            <div class="para">
-                <span class="emoji"></span><br><br>
-                And when u said "if you don't value me then I don't want to be with you" it broked me soo much and I think I deserve that but Ayesha don't do this to me 💔, ive repeated soo many mistakes please forgive me for that 🥺, tum mujsy pyar krti Ho n'a pls MAAF krdo uske liye 🥺, Ayesha I only value you yr, I truly value you, only you, nothing is more important than you anything in my life, you're the only one who holds my heart who have my respect who have my love. But I think I failed to prove it to you.. Ayesha mène Jo bh kaha tha tumhy bs gusse mein kaha tha yr I never meant to say anything like that, Mein bs ab Kia kahun I can't even défend myself 💔, sorry for my behavior ayesha 💔💔💔😭😭😭😖🥺
-            </div>
-
-            <div class="para">
-                <span class="emoji">My Dearest Jana🖤✨</span><br><br>
-                Ayesha Jo mène recently stories lagayin thin jese ke "I noticed you're not even excited about my precense anymore" Cuz yr ayesha is liye lagayi thi ayesha I saw your face and eyes two days ago and I was very tense ke what happend to her, and ye bat kbsy notice krha tha Mein tou bs isi liye lgyi thi 🥺🥺, Or ayesha bat rahi peace ke tou Jana you're the only one which I gets better talking to 🥺❤my sweetest jana 🥺✨,my jan💗, mera bacha ❤,I love youuuuuuu💗 I love your face🥺, your eyes the most❤, your nose💗,your face✨,everything about you my love💗😭,you think ke I don't love you more than before? I love you more than that mera bacha🥺✨you're the only one that holds my heart and you will forever. ✨🖤, my heart only gets peace when I talk to you ❤🥺 my heart gets normal when I talk to you 💖🥺 yaqeen mano itne dino ke bad jab tumny message Kia tou dil ko aesa sukoon Mila na ke bss 🥺😭😭😭 jana I love you sooo much yr 🥺 i trust you only, only you soo much 🥺 please aese act nahi krna kr tum andar sy sahi Ho 🥺 jesi Ho gussa Ho naraz Ho tang Ho mujsy, mujsy kaho please kaho tumhare elawa koi nhi h yr mera 🥺🥺 tumsy itni muhabbat barh chuki h ek Choti si cheez bh mujhhy bhut hurt or disturb Kia krti thi, phr bs control nhi hota tha gussa mera 🥺 ive broked a lot promises of you yr 😭🥺, Patti bh kheli, late night outing bh ki, but this time I really promise ajj ke bad sy nhi krunga kch bh 🥺, I'm sorry meri Jan for treating you that badly yr, please mujsy dil mt uthana please don't find someone else yr glti samaj kr MAAF krdo 🥺.
-            </div>
-        </div>
+    <div id="paragraph2" class="paragraph hidden">
+      "I hopeeeeee youuuuu understand my jana🥺💗, mera bacha ❤, meri Jan 💗,
+      meri sweet dish❤, my januuu 😂❤, meri guriya🖤✨, meri sab kuch ✨💗😁,
+      my everything ✨✨😁, my loveeee💗, the person who holds my heart🖤🖤❤,
+      my person 😭❤✨, my favourite one ✨❤, my coconut ice creammmm✨❤😁meri duniya
+      😁🖤, mera dil😁❤, meri zindagiiii💗👄,yaar I loveeee youuuuu soooo much
+      ✨❤, I just cant explain it how I am feeling right now but I'm in more love
+      with you. 💗😭. Please don't change at least for me, I don't care what u do
+      to the world, change for them, but stay remain the same for me, the childish
+      Ayesha 😁, the sweetest Ayesha 😁, my Ayesha🥺✨❤, I wish you were here in
+      front of me 🥺so I could hug you tightly and shed my tears on you to tell you
+      how much I was missing you and how much I love you🥺"
     </div>
 
-    <script>
-        // Add floating emojis and hearts
-        const emojis = ['❤️', '💔', '💖', '😭', '🖤', '✨', '🥺'];
-        const heartsContainer = document.querySelector('.hearts');
-        
-        for(let i = 0; i < 50; i++) {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.top = Math.random() * 100 + 'vh';
-            heart.style.animationDelay = Math.random() * 5 + 's';
-            heart.style.fontSize = Math.random() * 30 + 20 + 'px'; // Random size
-            heartsContainer.appendChild(heart);
+    <button id="heart-btn" onclick="revealSecondParagraph()">❤️</button>
+    <div id="arrow">Click here for a surprise</div>
+
+    <div id="romantic-message">
+      You are my everything, Ayesha. Forever and always. ❤️
+    </div>
+  </div>
+
+  <script>
+    // Floating Emojis
+    const emojis = ["🖤", "✨", "🥺", "❤", "💗", "💋"];
+    const emojiContainer = document.getElementById("emoji-container");
+    const numEmojis = 40;
+
+    function createEmoji() {
+      const span = document.createElement("span");
+      span.className = "emoji";
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      span.style.left = Math.random() * 100 + "%";
+      const duration = 8 + Math.random() * 5;
+      const delay = Math.random() * 5;
+      span.style.animationDuration = duration + "s";
+      span.style.animationDelay = delay + "s";
+      emojiContainer.appendChild(span);
+    }
+
+    setTimeout(() => {
+      for (let i = 0; i < numEmojis; i++) {
+        setTimeout(createEmoji, Math.random() * 2000);
+      }
+    }, 2000);
+
+    // Password Logic
+    let attempts = 0;
+    const correctPassword = "Wajahat Chashmish";
+    const errorMsg = document.getElementById("errorMsg");
+    const loginContainer = document.getElementById("login-container");
+    const revealMessage = document.getElementById("reveal-message");
+    const letterContainer = document.getElementById("letter-container");
+
+    function checkPassword() {
+      const inputVal = document.getElementById("passwordInput").value.trim();
+      if (inputVal === correctPassword) {
+        errorMsg.textContent = "";
+        revealMessage.style.display = "block";
+        revealMessage.textContent = "yuppieeeee, I kneww it you love me the most ✨😁";
+
+        setTimeout(() => {
+          loginContainer.style.display = "none";
+          revealMessage.style.display = "none";
+          letterContainer.style.display = "block";
+        }, 3000);
+      } else {
+        attempts++;
+        if (attempts === 1) {
+          errorMsg.textContent = "awwww you don't even know it🥺";
+        } else if (attempts === 2) {
+          errorMsg.textContent = "Kitni Buri Baat Hy Na Ayesha 🙄";
+        } else {
+          errorMsg.textContent = "wrong password";
         }
-    </script>
+      }
+    }
+
+    // NEW: Sparkle effect creator
+    function createSparkles(x, y) {
+      for(let i=0; i<8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1000);
+      }
+    }
+
+    // NEW: Floating text creator
+    function createFloatText(text) {
+      const floatDiv = document.createElement('div');
+      floatDiv.className = 'float-text';
+      floatDiv.textContent = text;
+      floatDiv.style.left = Math.random()*80 + 10 + '%';
+      document.body.appendChild(floatDiv);
+      setTimeout(() => floatDiv.remove(), 3000);
+    }
+
+    // FIXED RAIN FUNCTION
+    function createRain() {
+      const types = ['❤️', '💋', '💌', '💘'];
+      for(let i=0; i<30; i++) {
+        const emoji = document.createElement('div');
+        emoji.style.cssText = `
+          position: fixed;
+          font-size: ${Math.random()*30+20}px;
+          left: ${Math.random()*100}%;
+          top: -50px;
+          animation: raindrop ${Math.random()*3+2}s linear infinite;
+          pointer-events: none;
+          z-index: 9999;
+          color: ${Math.random() > 0.5 ? '#ff1493' : '#ff69b4'};
+        `;
+        emoji.textContent = types[Math.floor(Math.random()*types.length)];
+        document.body.appendChild(emoji);
+        
+        // Update love meter
+        document.getElementById('love-progress').style.width = 
+          Math.min(parseInt(document.getElementById('love-progress').style.width) + 1, 100) + '%';
+
+        setTimeout(() => emoji.remove(), 5000);
+      }
+    }
+
+    // MODIFIED REVEAL FUNCTION
+    function revealSecondParagraph() {
+      document.getElementById("paragraph1").classList.add("hidden");
+      document.getElementById("paragraph2").classList.remove("hidden");
+      document.getElementById("heart-btn").style.display = "none";
+      document.getElementById("arrow").style.display = "none";
+      document.getElementById("romantic-message").style.display = "block";
+
+      // Start effects
+      const rainInterval = setInterval(createRain, 300);
+      setInterval(() => createMessageBubble(), 2000);
+      
+      // Add sparkle effect
+      createSparkles(window.innerWidth/2, window.innerHeight/2);
+      
+      // Add floating text
+      createFloatText('Forever Yours!');
+      setTimeout(() => createFloatText('My Eternal Love!'), 1000);
+      
+      // Add click effect on emojis
+      document.addEventListener('click', (e) => {
+        if(e.target.classList.contains('emoji')) {
+          createSparkles(e.clientX, e.clientY);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
